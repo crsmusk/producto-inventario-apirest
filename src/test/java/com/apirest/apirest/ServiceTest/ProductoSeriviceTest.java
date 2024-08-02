@@ -69,6 +69,15 @@ public class ProductoSeriviceTest {
    }
 
    @Test
+   public void producto_low_Stock(){
+    List<productoDTO>productoDto=productoService.lowStock(100);
+    productoDTO productoDtoObtenido=productoDto.get(0);
+
+    assertEquals(productoDTOEsperado, productoDtoObtenido);
+
+   }
+
+   @Test
    public void producto_find_By_Id_Exception(){
     assertThrows(ProductoException.class, ()->{
         productoService.findById(98L);
