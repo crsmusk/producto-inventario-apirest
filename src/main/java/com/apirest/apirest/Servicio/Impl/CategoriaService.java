@@ -45,7 +45,7 @@ public class CategoriaService implements CategoriaDAO{
 
     @Override
     public Optional<categoriaDTO> findByName(String name) {
-       categoria category=categoriaRepo.findByNombreCategoriaIgnoreCase(name);
+       categoria category=categoriaRepo.findByNombreCategoriaIgnoreCase(name).orElseThrow(()->new CategoriaException());
        categoriaDTO categoria=mapper.toCategoriaDto(category);
        return Optional.of(categoria);
        
