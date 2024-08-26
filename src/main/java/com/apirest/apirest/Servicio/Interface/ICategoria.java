@@ -1,11 +1,11 @@
-package com.apirest.apirest.Servicio;
+package com.apirest.apirest.Servicio.Interface;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.apirest.apirest.Model.DTOs.categoriaDTO;
 
-public interface CategoriaDAO {
+public interface ICategoria {
  public List<categoriaDTO>findAll();
  public Optional<categoriaDTO>findById(Long id);
  public void save(categoriaDTO categoriaDTO);

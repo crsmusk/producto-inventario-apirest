@@ -11,11 +11,11 @@ import com.apirest.apirest.Exception.ProductoException;
 import com.apirest.apirest.Model.DTOs.productoDTO;
 import com.apirest.apirest.Model.Entidades.producto;
 import com.apirest.apirest.Repositorio.ProductoRepository;
-import com.apirest.apirest.Servicio.ProductoDAO;
+import com.apirest.apirest.Servicio.Interface.IProducto;
 import com.apirest.apirest.mapper.ProductoMapper;
 
 @Service
-public class ProductoService implements ProductoDAO {
+public class ProductoService implements IProducto {
     @Autowired
     private  ProductoMapper mapper;
     

@@ -1,4 +1,4 @@
-package com.apirest.apirest.Servicio;
+package com.apirest.apirest.Servicio.Interface;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +7,7 @@ import java.util.Optional;
 import com.apirest.apirest.Model.DTOs.productoDTO;
 
 
-public interface ProductoDAO {
+public interface IProducto {
  
  public List<productoDTO>findAll();
  public Optional<productoDTO>findById(Long id);

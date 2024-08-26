@@ -10,11 +10,11 @@ import com.apirest.apirest.Exception.CategoriaException;
 import com.apirest.apirest.Model.DTOs.categoriaDTO;
 import com.apirest.apirest.Model.Entidades.categoria;
 import com.apirest.apirest.Repositorio.CategoriaRepository;
-import com.apirest.apirest.Servicio.CategoriaDAO;
+import com.apirest.apirest.Servicio.Interface.ICategoria;
 import com.apirest.apirest.mapper.CategoriaMapper;
 
 @Service
-public class CategoriaService implements CategoriaDAO{
+public class CategoriaService implements ICategoria{
 
     @Autowired
     private  CategoriaMapper mapper;
