@@ -15,6 +15,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class productoDTO {
+    Long id;
     private String nombre;
     private double precio;
     private int  cantidad;

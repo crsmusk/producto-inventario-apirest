@@ -18,6 +18,7 @@ public class ProductoMapper {
     .precio(producto.getPrecio())
     .cantidad(producto.getCantidad())
     .categoria(producto.getCategoria())
+    .id(producto.getId())
     .build();
    }
 

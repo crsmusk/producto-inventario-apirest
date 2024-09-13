@@ -15,6 +15,7 @@ public class CategoriaMapper {
       public categoriaDTO toCategoriaDto(categoria categoria){
         return categoriaDTO.builder()
         .nombre(categoria.getNombreCategoria())
+        .id(categoria.getId())
         .build();
       } 
 
