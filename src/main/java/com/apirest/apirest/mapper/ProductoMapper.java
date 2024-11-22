@@ -17,21 +17,15 @@ public class ProductoMapper {
     .nombre(producto.getNombre())
     .precio(producto.getPrecio())
     .cantidad(producto.getCantidad())
-    .categoria(producto.getCategoria())
+    .categoria(producto.getCategoria().getNombreCategoria())
+    .marca(producto.getProveedor().getNombreMarca())
     .id(producto.getId())
-    .build();
+     .build();
    }
 
    public List<productoDTO>toproductosDto(List<producto>productos){
     return productos.stream().map(this::toProductoDto).toList();
    }
 
-   public producto toProducto(productoDTO productoDTO){
-    producto producto=new producto();
-    producto.setNombre(productoDTO.getNombre());
-    producto.setCantidad(productoDTO.getCantidad());
-    producto.setPrecio(productoDTO.getPrecio());
-    return producto;
-    
-   }
+
 }

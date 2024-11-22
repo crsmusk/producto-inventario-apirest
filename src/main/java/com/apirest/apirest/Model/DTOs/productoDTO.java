@@ -1,6 +1,6 @@
 package com.apirest.apirest.Model.DTOs;
 
-import com.apirest.apirest.Model.Entidades.categoria;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +19,6 @@ public class productoDTO {
     private String nombre;
     private double precio;
     private int  cantidad;
-    private categoria categoria;
+    private String  categoria;
+    private String marca;
 }

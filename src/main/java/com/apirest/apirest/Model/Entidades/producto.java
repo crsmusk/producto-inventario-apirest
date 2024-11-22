@@ -1,13 +1,6 @@
 package com.apirest.apirest.Model.Entidades;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -27,7 +20,10 @@ public class producto {
  private String nombre;
  private double precio;
  private int  cantidad;
- @ManyToOne
+ @ManyToOne(cascade = CascadeType.MERGE)
  @JoinColumn(name = "categoria_id")
  private categoria categoria;
+ @ManyToOne(cascade = CascadeType.MERGE)
+ @JoinColumn(name = "proveedor_id")
+ private proveedor proveedor;
 }

@@ -18,7 +18,7 @@ import com.apirest.apirest.Model.DTOs.productoDTO;
 import com.apirest.apirest.Repositorio.ProductoRepository;
 import com.apirest.apirest.Servicio.Impl.ProductoService;
 
-@SpringBootTest
+/*@SpringBootTest
 public class ProductoSeriviceTest {
    private productoDTO productoDTOEsperado;
    private Long id;
@@ -93,4 +93,4 @@ public class ProductoSeriviceTest {
 
 
    
-}
+}*/

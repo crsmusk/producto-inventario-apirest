@@ -1,5 +1,12 @@
 package com.apirest.apirest.Servicio.Impl;
 
+import com.apirest.apirest.Exception.CategoriaException;
+import com.apirest.apirest.Exception.noHayContenidoException;
+import com.apirest.apirest.Exception.proveedorException;
+import com.apirest.apirest.Model.Entidades.categoria;
+import com.apirest.apirest.Model.Entidades.proveedor;
+import com.apirest.apirest.Repositorio.CategoriaRepository;
+import com.apirest.apirest.Repositorio.ProveedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,46 +25,67 @@ import com.apirest.apirest.mapper.ProductoMapper;
 public class ProductoService implements IProducto {
     @Autowired
     private  ProductoMapper mapper;
-    
-   
-
+    @Autowired
+    private CategoriaRepository  categoriaRepo;
+    @Autowired
+    private ProveedorRepository proveedorRepo;
     @Autowired
     private ProductoRepository productRepo;
    
     @Override
     public List<productoDTO> findAll() {
-        List<productoDTO>lista=mapper.toproductosDto(productRepo.findAll());
-        return lista;
+        List<producto>lista=productRepo.findAll();
+        if (lista.isEmpty()){
+            throw new noHayContenidoException();
+        }
+        return mapper.toproductosDto(lista);
     }
 
     @Override
-    public Optional<productoDTO> findById(Long id) {
+    public productoDTO findById(Long id) {
         producto product=productRepo.findById(id).orElseThrow(()->new ProductoException());
-        productoDTO producto=mapper.toProductoDto(product);
-        return Optional.of(producto);
+        return mapper.toProductoDto(product);
     }
 
     @Override
-    public Optional<List<productoDTO>> findByNombre(String name) {
-      List<productoDTO>product=mapper.toproductosDto(productRepo.findByNombreIgnoreCase(name));
-      return Optional.of(product);
+    public List<productoDTO> findByNombre(String name) {
+      List<producto>product=productRepo.findByNombreIgnoreCase(name);
+      if (product.isEmpty()){
+          throw new noHayContenidoException();
+      }
+      return mapper.toproductosDto(product);
     }
 
     @Override
     public List<productoDTO> lowStock(int lessthan) {
-        List<productoDTO>product=mapper.toproductosDto(productRepo.findByCantidadLessThan(lessthan));
-        return product;
+        List<producto>lista=productRepo.findByCantidadLessThan(lessthan);
+        if (lista.isEmpty()){
+            throw new noHayContenidoException();
+        }
+        return mapper.toproductosDto(lista);
     }
 
     @Override
     public void save(productoDTO productoDTO) {
-       
-       productRepo.save(mapper.toProducto(productoDTO));
+        producto producto=new producto();
+        producto.setCantidad(productoDTO.getCantidad());
+        producto.setPrecio(productoDTO.getPrecio());
+        producto.setNombre(productoDTO.getNombre());
+        categoria categoria=categoriaRepo.findByNombreCategoriaIgnoreCase(productoDTO.getCategoria()).orElseThrow(()->new CategoriaException());
+        producto.setCategoria(categoria);
+        proveedor proveedor=proveedorRepo.findByNombreMarcaIgnoreCase(productoDTO.getMarca()).orElseThrow(()->new proveedorException());
+        producto.setProveedor(proveedor);
+        productRepo.save(producto);
     }
 
     @Override
     public void delete(Long id) {
-        productRepo.deleteById(id);
+        if (productRepo.existsById(id)){
+            productRepo.deleteById(id);
+        }else{
+            throw new ProductoException();
+        }
+
     }
 
     @Override
@@ -66,13 +94,30 @@ public class ProductoService implements IProducto {
         product.setNombre(ProductoDTO.getNombre());
         product.setPrecio(ProductoDTO.getPrecio());
         product.setCantidad(ProductoDTO.getCantidad());
+        categoria categoria=categoriaRepo.findByNombreCategoriaIgnoreCase(ProductoDTO.getCategoria()).orElseThrow(()->new CategoriaException());
+        product.setCategoria(categoria);
+        proveedor proveedor=proveedorRepo.findByNombreMarcaIgnoreCase(ProductoDTO.getMarca()).orElseThrow(()->new proveedorException());
+        product.setProveedor(proveedor);
         productRepo.save(product);
         return mapper.toProductoDto(product);
     }
-    
-   
-    
-     
+
+    @Override
+    public productoDTO updateStock(Long id, int newStock) {
+        producto producto=productRepo.findById(id).orElseThrow(()->new ProductoException());
+        producto.setCantidad(newStock);
+        productRepo.save(producto);
+        return mapper.toProductoDto(producto);
+    }
+
+    @Override
+    public productoDTO changeMarca(Long id, String marca) {
+        producto producto=productRepo.findById(id).orElseThrow(()->new ProductoException());
+        proveedor proveedor=proveedorRepo.findByNombreMarcaIgnoreCase(marca).orElseThrow(()->new proveedorException());
+        producto.setProveedor(proveedor);
+        productRepo.save(producto);
+        return mapper.toProductoDto(producto);
+    }
 
 
 }
