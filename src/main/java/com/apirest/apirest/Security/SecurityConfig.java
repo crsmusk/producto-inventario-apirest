@@ -1,5 +1,6 @@
 package com.apirest.apirest.Security;
 
+import com.apirest.apirest.Servicio.userDetails.userDetailService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,8 +31,7 @@ public class SecurityConfig {
         .httpBasic(Customizer.withDefaults())
         .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(request->{
-            request.requestMatchers(HttpMethod.GET).permitAll();
-            request.anyRequest().authenticated();
+           request.anyRequest().authenticated();
         });
         return http.build();
     }
@@ -41,14 +42,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider(userDetailService userDetailService){
         DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService());
+        provider.setUserDetailsService(userDetailService);
         return provider;
     }
 
-    @Bean
+   /* @Bean
     public UserDetailsService userDetailsService(){
         UserDetails user=User.withUsername("Pedro")
         .password(passwordEncoder().encode("234567"))
@@ -56,11 +57,11 @@ public class SecurityConfig {
         .authorities("READ")
         .build();
         return new InMemoryUserDetailsManager(user);
-    }
+    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(); 
+        return NoOpPasswordEncoder.getInstance();
     }
   
 
