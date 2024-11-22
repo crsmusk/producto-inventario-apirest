@@ -3,6 +3,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,43 +30,35 @@ public class categoriaController {
     CategoriaService categoriaService;
     
     @GetMapping
-    public List<categoriaDTO>getAll(){
-     return categoriaService.findAll();
+    public ResponseEntity<List<categoriaDTO>>getAll(){
+     return new ResponseEntity<>(categoriaService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public Optional<categoriaDTO>getById(@PathVariable Long id){
-        if(categoriaService.findById(id).isPresent()){
-            return categoriaService.findById(id);
-        }else{
-            throw new CategoriaException();
-        }
+    @GetMapping("buscar-por-id/{id}")
+    public ResponseEntity<categoriaDTO>getById(@PathVariable Long id){
+        return new ResponseEntity<>(categoriaService.findById(id),HttpStatus.OK);
     }
 
-    @GetMapping("/buscarPorNombre/{nombreCategoria}")
-    public Optional<categoriaDTO>getByName(@PathVariable String nombre){
-        if(categoriaService.findByName(nombre).isPresent()){
-            return categoriaService.findByName(nombre);
-        }else{
-            throw new CategoriaException();
-        }
+    @GetMapping("/buscar-por-nombre/{nombreCategoria}")
+    public ResponseEntity<categoriaDTO>getByName(@PathVariable String nombreCategoria){
+       return new ResponseEntity<>(categoriaService.findByName(nombreCategoria),HttpStatus.OK);
     }
 
     @PostMapping
-    public String save(@RequestBody categoriaDTO categoriaDTO){
+    public ResponseEntity<?> save(@RequestBody categoriaDTO categoriaDTO){
         categoriaService.save(categoriaDTO);
-        return "se guardo con exito la categoria";
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id){
+    public ResponseEntity<?> delete(@PathVariable Long id){
         categoriaService.delete(id);
-        return "se borro con exito la categoria";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public categoriaDTO update(@PathVariable Long id,@RequestBody categoriaDTO categoriaDTO){
-        return categoriaService.update(id, categoriaDTO);
+    public ResponseEntity<categoriaDTO> update(@PathVariable Long id,@RequestBody categoriaDTO categoriaDTO){
+        return new ResponseEntity<>(categoriaService.update(id,categoriaDTO),HttpStatus.OK);
     }
 
 

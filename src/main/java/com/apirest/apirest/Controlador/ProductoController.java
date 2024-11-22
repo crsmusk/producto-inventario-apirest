@@ -3,14 +3,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.apirest.apirest.Exception.ProductoException;
 import com.apirest.apirest.Model.DTOs.productoDTO;
@@ -22,52 +17,53 @@ public class ProductoController {
   private ProductoService productService;
 
   @GetMapping
-  public List<productoDTO>getAll(){
-    return productService.findAll();
+  public ResponseEntity<List<productoDTO>>getAll(){
+    return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
   }
 
-  @GetMapping ("/{id}")
-  public Optional<productoDTO> getById (@PathVariable Long id){
-    if (productService.findById(id).isPresent()) {
-        return productService.findById(id);
-    }else{
-      throw new ProductoException();
-    }
+  @GetMapping ("/buscar-por-id/{id}")
+  public ResponseEntity<productoDTO> getById (@PathVariable Long id){
+   return new ResponseEntity<>(productService.findById(id),HttpStatus.OK);
     
   }
 
-  @GetMapping("/buscarPorNombre/{nombre}")
-  public Optional<List<productoDTO>>getAllByNombre(@PathVariable String nombre){
-    if (productService.findByNombre(nombre).isPresent()) {
-      return productService.findByNombre(nombre);
-    }else{
-      throw new ProductoException();
-    }
+  @GetMapping("/buscar-por-nombre/{nombre}")
+  public ResponseEntity<List<productoDTO>>getAllByNombre(@PathVariable String nombre){
+    return new ResponseEntity<>(productService.findByNombre(nombre),HttpStatus.OK);
     
   }
 
   @GetMapping("/Stock/{referencia}")
-  public List<productoDTO>getLowStock(@PathVariable int referencia){
-    return productService.lowStock(referencia);
+  public ResponseEntity<List<productoDTO>>getLowStock(@PathVariable int referencia){
+    return new ResponseEntity<>(productService.lowStock(referencia),HttpStatus.OK);
   }
 
   @PostMapping
-  public String save(@RequestBody productoDTO productoDTO){
+  public ResponseEntity<?> save(@RequestBody productoDTO productoDTO){
     productService.save(productoDTO);
-    return "se ha guardado con exito";
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   @DeleteMapping("/{id}")
-  public String delete(@PathVariable Long id){
+  public ResponseEntity<?> delete(@PathVariable Long id){
     productService.delete(id);
-    return "se ha eliminado con exito";
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PutMapping("/{id}")
-  public productoDTO update(@PathVariable Long id,@RequestBody productoDTO productoDTO){
-    return productService.update(id, productoDTO);
+  public ResponseEntity<productoDTO>update(@PathVariable Long id,@RequestBody productoDTO productoDTO){
+    return new ResponseEntity<>(productService.update(id,productoDTO),HttpStatus.OK);
   }
 
+  @PatchMapping("/actualizar-stock/{id}/{cantidad}")
+  public ResponseEntity<productoDTO>updateStock(@PathVariable Long id,@PathVariable int cantidad){
+    return new ResponseEntity<>(productService.updateStock(id,cantidad),HttpStatus.OK);
+  }
+
+  @PatchMapping("/cambiar-marca/{id}/{marca}")
+  public ResponseEntity<productoDTO>changeMarca(@PathVariable Long id,@PathVariable String marca){
+    return new ResponseEntity<>(productService.changeMarca(id,marca),HttpStatus.OK);
+  }
 
   
 
