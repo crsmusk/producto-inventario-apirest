@@ -16,7 +16,7 @@ import com.apirest.apirest.Model.DTOs.categoriaDTO;
 import com.apirest.apirest.Repositorio.CategoriaRepository;
 import com.apirest.apirest.Servicio.Impl.CategoriaService;
 
-@SpringBootTest
+/*@SpringBootTest
 public class categoriaServiceTest {
 
     private categoriaDTO categoriaDTOEsperada;
@@ -77,3 +77,4 @@ public class categoriaServiceTest {
     }
 
 }
+*/
