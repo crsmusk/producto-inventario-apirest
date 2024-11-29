@@ -1,13 +1,13 @@
 FROM eclipse-temurin:21.0.5_11-jdk
 EXPOSE  8080
 WORKDIR /app
-COPY  ./.mvn /app/.mvn
-COPY  ./mvnw /app
-COPY ./pom.xml /app
+COPY  .mvn ./.mvn
+COPY  mvnw .
+COPY  pom.xml .
 
 RUN ./mvnw dependency:go-offline 
 
-COPY ./src /app
+COPY src ./src
 
 RUN ./mvnw clean install -DskipTest
 
